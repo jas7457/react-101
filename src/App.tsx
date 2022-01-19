@@ -1,17 +1,18 @@
+import clsx from 'clsx';
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { NavLink } from 'react-router-dom';
 import Routes, { ROUTES } from './Routes';
 
 export default function App() {
 	return (
 		<>
 			<div className="flex h-screen">
-				<div className="flex-shrink-0 h-full bg-gray-800 text-white px-8">
+				<div className="flex-shrink-0 bg-gray-800 text-white px-8 space-y-4 py-6">
 					{ROUTES.map((route) => {
 						if ('children' in route) {
 							return (
-								<React.Fragment key={route.title}>
-									<div>{route.title}</div>
+								<div key={route.title}>
+									<div className="text-xl">{route.title}</div>
 									<div className="pl-4">
 										{route.children.map((child) => (
 											<SidebarLink key={child.path} to={child.path}>
@@ -19,18 +20,18 @@ export default function App() {
 											</SidebarLink>
 										))}
 									</div>
-								</React.Fragment>
+								</div>
 							);
 						}
 
 						return (
-							<SidebarLink key={route.path} to={route.path}>
+							<SidebarLink key={route.path} className="text-xl" to={route.path}>
 								{route.title}
 							</SidebarLink>
 						);
 					})}
 				</div>
-				<div className="flex-grow h-full overflow-y-auto">
+				<div className="flex-grow overflow-y-auto">
 					<div className="max-w-[1800px] mx-auto p-6">
 						<Routes />
 					</div>
@@ -40,10 +41,23 @@ export default function App() {
 	);
 }
 
-function SidebarLink({ to, children }: { to: string; children: React.ReactNode }) {
+function SidebarLink({
+	to,
+	children,
+	className,
+}: {
+	to: string;
+	children: React.ReactNode;
+	className?: string;
+}) {
 	return (
-		<Link to={to} className="block">
+		<NavLink
+			to={to}
+			className={({ isActive }) => {
+				return clsx('block', className, { 'text-orange-500': isActive });
+			}}
+		>
 			{children}
-		</Link>
+		</NavLink>
 	);
 }

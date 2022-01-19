@@ -1,4 +1,6 @@
 import clsx from 'clsx';
+import { useContext, useEffect } from 'react';
+import PageContext from '../contexts/PageContext';
 
 export default function Heading({
 	level,
@@ -6,10 +8,16 @@ export default function Heading({
 	className,
 }: {
 	level: 1 | 2 | 3 | 4 | 5 | 6;
-	children: React.ReactNode;
+	children: string;
 	className?: string;
 }) {
+	const pageContext = useContext(PageContext);
+
 	const Component = `h${level}` as const;
+
+	useEffect(() => {
+		pageContext.addHeading(children);
+	}, [level, pageContext]);
 
 	const headingClass = {
 		1: 'text-3xl',
@@ -20,5 +28,19 @@ export default function Heading({
 		6: 'text-sm',
 	}[level];
 
-	return <Component className={clsx(className, 'font-bold', headingClass)}>{children}</Component>;
+	return (
+		<Component
+			id={headingTranslation(children)}
+			className={clsx(className, 'font-bold', headingClass)}
+		>
+			{children}
+		</Component>
+	);
+}
+
+export function headingTranslation(text: string) {
+	return text
+		.replace(/\s+/g, '-')
+		.replace(/[^\d\w-]/gi, '')
+		.toLowerCase();
 }

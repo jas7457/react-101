@@ -12,7 +12,7 @@ export default function ComponentsIntro() {
 					only the UI (think hbs files), but also the business logic (think Ember controller).
 				</p>
 
-				<section>
+				<section className="space-y-4">
 					<Heading level={2}>What does a component do?</Heading>
 					<List>
 						<ListItem>

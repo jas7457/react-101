@@ -1,7 +1,7 @@
 import CodeBlock, { CodeBlockViewer } from '../../components/CodeBlock';
 import Heading from '../../components/Heading';
 import List, { ListItem } from '../../components/List';
-import ExternalLink from './ExternalLink';
+import ExternalLink from '../../components/ExternalLink';
 
 import tsExample from './ts-example.png';
 
@@ -117,13 +117,7 @@ export default function ComponentProps() {
 						);
 					}
 					
-					function DestructureInline({
-						name,
-						color = "blue"
-					}: {
-						name: string;
-						color?: "red" | "blue";
-					}) {
+					function DestructureInline({ name, color = "blue" }: { name: string; color?: "red" | "blue"; }) {
 						return <div style={{ color }}>Hello {name}</div>;
 					}
 					
@@ -164,10 +158,12 @@ export default function ComponentProps() {
 					interface ButtonProps {
 						children: React.ReactNode;
 						disabled?: boolean;
+						onClick?: () => void;
+						className?: string;
 					}
 					
-					function Button({ children, disabled }: ButtonProps) {
-						return <button disabled={disabled}>{children}</button>;
+					function Button({ children, disabled, onClick, className }: ButtonProps) {
+						return <button className={className} onClick={onClick} disabled={disabled}>{children}</button>;
 					}
 					
 					function HideableButton({

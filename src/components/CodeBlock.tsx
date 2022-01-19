@@ -1,29 +1,33 @@
 import {
+	CodeEditorProps,
 	SandpackCodeEditor,
+	CodeViewerProps,
 	SandpackCodeViewer,
 	SandpackLayout,
 	SandpackPreview,
 	SandpackProps,
 	SandpackProvider,
 } from '@codesandbox/sandpack-react';
-import '@codesandbox/sandpack-react/dist/index.css';
 import { useMemo } from 'react';
+
+import '@codesandbox/sandpack-react/dist/index.css';
 
 export default function CodeBlock({
 	children,
 	editable = true,
 	showPreview = true,
 	files = { '/App.tsx': stripIndentation(children) },
+	customSetup,
+	...rest
 }: {
 	children: string;
 	editable?: boolean;
 	showPreview?: boolean;
-	files?: SandpackProps['files'];
-}) {
+} & Pick<SandpackProps, 'files' | 'customSetup'>) {
 	const editorPart = showPreview ? 70 : 100;
 	const previewPart = 100 - editorPart;
 
-	const codeProps = {
+	const codeProps: CodeEditorProps | CodeViewerProps = {
 		wrapContent: true,
 		showLineNumbers: true,
 		customStyle: {
@@ -32,6 +36,7 @@ export default function CodeBlock({
 			flexGrow: editorPart,
 			flexShrink: editorPart,
 		},
+		...rest,
 	};
 
 	const formattedFiles = useMemo(() => {
@@ -41,7 +46,7 @@ export default function CodeBlock({
 	}, [files]);
 
 	return (
-		<SandpackProvider template="react-ts" customSetup={{ files: formattedFiles }}>
+		<SandpackProvider template="react-ts" customSetup={{ ...customSetup, files: formattedFiles }}>
 			<SandpackLayout theme="night-owl">
 				{editable ? <SandpackCodeEditor {...codeProps} /> : <SandpackCodeViewer {...codeProps} />}
 				{showPreview && (
@@ -62,13 +67,12 @@ export default function CodeBlock({
 
 export function CodeBlockViewer({
 	children,
-	files,
+	...rest
 }: {
 	children: string;
-	files?: SandpackProps['files'];
-}) {
+} & Pick<SandpackProps, 'files' | 'customSetup'>) {
 	return (
-		<CodeBlock editable={false} showPreview={false} files={files}>
+		<CodeBlock editable={false} showPreview={false} {...rest}>
 			{children}
 		</CodeBlock>
 	);

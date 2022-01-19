@@ -1,11 +1,11 @@
-import CodeBlock, { CodeBlockViewer } from '../../components/CodeBlock';
+import CodeBlock from '../../components/CodeBlock';
 import Heading from '../../components/Heading';
-import ExternalLink from './ExternalLink';
+import ExternalLink from '../../components/ExternalLink';
 
 export default function ComponentConditionals() {
 	return (
 		<div className="space-y-8">
-			<Heading level={1}>Components - Conditionals</Heading>
+			<Heading level={1}>Components - Conditionals & Loops</Heading>
 
 			<section className="space-y-4">
 				<p>
@@ -157,6 +157,93 @@ export default function ComponentConditionals() {
 						}
 					
 						return <div>Finished loading data.</div>;
+					}
+					
+					`}
+				</CodeBlock>
+			</section>
+
+			<section className="space-y-4">
+				<Heading level={2}>Loops</Heading>
+
+				<p>
+					Again, there is no special syntax for template looping in JSX/React. Instead, you rely on{' '}
+					<code>Array.prototype.map</code> to loop over elements and print them out. This also
+					allows easy inline filtering of elements.
+				</p>
+
+				<CodeBlock>
+					{`
+					export default function App() {
+						const people = [
+							{ id: 1, name: "Eleanor Shellstrop", good: true },
+							{ id: 2, name: "Chidi Anagonye", good: true },
+							{ id: 3, name: "Vicky", good: false },
+							{ id: 4, name: "Shawn", good: false }
+						];
+					
+						return (
+							<div>
+								<h1>Good People</h1>
+					
+								{people
+									.filter((person) => person.good === true)
+									.map((person) => {
+										return <div key={person.id}>{person.name}</div>;
+									})}
+					
+									{/* Or use implicit return if there isn't much logic to your inner map callback
+									{people
+										.filter((person) => person.good === true)
+										.map((person) => <div key={person.id}>{person.name}</div>)
+									}
+									*/}
+							</div>
+						);
+					}
+					`}
+				</CodeBlock>
+
+				<p>
+					You might notice that I used a <code>key</code> on each item in the map. The one caveat of
+					iterating over lists in React is you should supply a <b>unique</b> key to each child. This
+					key only has to be unique amongst its siblings, it does <b>not</b> have to be globally
+					unique. This helps with performance and lets React know if things were
+					added/removed/altered. Generally speaking, you should try to use a unique id or other
+					property that is unique for that item set. If no such value is available, you can use the
+					array index as a last resort, but if that index can change for an item (such as sorting,
+					filtering, etc), you can have a negative performance impact. React more about keys{' '}
+					<ExternalLink href="https://reactjs.org/docs/lists-and-keys.html#keys">here</ExternalLink>
+					.
+				</p>
+
+				<p>
+					Since you can put any JSX into a variable, the same is true for mapped lists. Although
+					this isn't as common and I'd recommend putting it directly in the return value, it's worth
+					pointing out.
+				</p>
+
+				<CodeBlock>
+					{`
+					export default function App() {
+						const people = [
+							{ id: 1, name: "Eleanor Shellstrop", good: true },
+							{ id: 2, name: "Chidi Anagonye", good: true },
+							{ id: 3, name: "Vicky", good: false },
+							{ id: 4, name: "Shawn", good: false }
+						];
+					
+						const goodPeople = people
+							.filter((person) => person.good === true)
+							.map((person) => <div key={person.id}>{person.name}</div>);
+					
+						return (
+							<div>
+								<h1>Good People</h1>
+					
+								{goodPeople}
+							</div>
+						);
 					}
 					
 					`}

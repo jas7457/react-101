@@ -9,7 +9,7 @@ export default function List({
 
 	return (
 		<Component
-			className={clsx('list-outside pl-4', {
+			className={clsx(className, 'list-outside pl-4 ml-4', {
 				'list-decimal': type === 'ordered',
 				'list-disc': type === 'unordered',
 			})}

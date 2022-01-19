@@ -1,3 +1,12 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+p + p {
+	margin-top: 1rem;
+}
+
+/* Hack because you can't pass customStyles to "SandpackCodeViewer" */
+.sp-stack {
+	height: auto !important;
+}
