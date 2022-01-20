@@ -50,6 +50,7 @@ function Page({ element }: Pick<RouteProps, 'element'>) {
 	const [isVisible, setIsVisible] = useState(false);
 	useEffect(() => {
 		const timeout = setTimeout(() => {
+			window.scrollTo({ top: 0, behavior: 'smooth' });
 			setIsVisible(true);
 		}, 100);
 

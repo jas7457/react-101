@@ -165,10 +165,10 @@ export default function UseState() {
 				<p>
 					Imagine <code>count</code> is 3, and if in the same render the button is clicked, you're
 					effectively just doing <code>setCount(3 + 1);</code> twice. I've never seen this manifest
-					as actually happening in the wild, but React provides another way to call the state setter
-					function. Instead of passing a value, you can pass in a callback function that returns the
-					"previous" value for the state as its argument and you can use that. Generally speaking,
-					this is the preferred method if your new value depends on the previous value.
+					as actual bug in the wild, but React provides another way to call the state setter
+					function. Instead of passing a value, you can pass in a callback function that receives
+					the "previous" value for the state as its argument and you can use that. Generally
+					speaking, this is the preferred method if your new value depends on the previous value.
 				</p>
 
 				<CodeBlock>
@@ -182,7 +182,11 @@ export default function UseState() {
 							<div>
 								<div>Clicks: {count}</div>
 					
-								<button onClick={() => setCount((prevCount) => prevCount + 1)}>
+								<button onClick={() => {
+									setCount(function (prevCount) {
+										return prevCount + 1;
+									});
+								}}>
 									Click me!
 								</button>
 							</div>

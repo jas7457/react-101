@@ -108,8 +108,8 @@ export default function UseEffect() {
 					The other part of the <code>useEffect</code> API that is worth noting is the "cleanup
 					function". Let's imagine there is a pub/sub API in your app that you need to create
 					subscriptions, but ensure that you remove the subscription when this component is
-					unmounted. To accomplisht this, you can return a function from your effect that will React
-					will run.
+					unmounted. To accomplish this, you can return a function from your effect that will React
+					will run at the approriate times.
 				</p>
 
 				<CodeBlockViewer>
@@ -173,7 +173,7 @@ export default function UseEffect() {
 						We are putting the <code>userId</code> into the dependency array. This has two effects:
 						<List>
 							<ListItem>
-								The callback passed to useEffect will run on mount and again any type the{' '}
+								The callback passed to useEffect will run on mount and again any time the{' '}
 								<code>userId</code> changes.
 							</ListItem>
 							<ListItem>
@@ -182,6 +182,25 @@ export default function UseEffect() {
 							</ListItem>
 						</List>
 					</ListItem>
+				</List>
+
+				<p>
+					So for a real example, let's imagine userId is initially 1 and then later changes to 2.
+					Here is the flow that would happen:
+				</p>
+				<List type="ordered">
+					<ListItem>
+						The <code>useEffect</code> body would be called for user id 1 and a subscription would
+						be made
+					</ListItem>
+					<ListItem>The user changes from 1 to 2</ListItem>
+					<ListItem>The cleanup function for user 1 would be called</ListItem>
+					<ListItem>
+						The <code>useEffect</code> body would be called for user id 2 and a subscription would
+						be made
+					</ListItem>
+					<ListItem>The user navigates away, destroying the component</ListItem>
+					<ListItem>The cleanup function for user 2 would be called</ListItem>
 				</List>
 			</section>
 
@@ -210,7 +229,10 @@ export default function UseEffect() {
 								
 								setPokemon(poke.results);
 							}
+
 							fetchPokemon();
+
+							// or my preference is an async iife (async ()=>{})();
 						}, []);
 					
 						return (
@@ -227,6 +249,12 @@ export default function UseEffect() {
 					
 					`}
 				</CodeBlock>
+
+				<p>
+					<b>Note:</b> Don't make your main <code>useEffect</code> callback async. Remember that you
+					should only return a cleanup function from useEffect. If you make it async, you will
+					ALWAYS implicitly return a Promise even if you don't explicitly return anything.
+				</p>
 			</section>
 		</div>
 	);

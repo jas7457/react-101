@@ -7,7 +7,7 @@ export default function App() {
 	return (
 		<>
 			<div className="flex h-screen">
-				<div className="flex-shrink-0 bg-gray-800 text-white px-8 space-y-4 py-6">
+				<div className="flex-shrink-0 bg-gray-800 text-white px-8 space-y-4 py-6 fixed h-screen w-60">
 					{ROUTES.map((route) => {
 						if ('children' in route) {
 							return (
@@ -31,7 +31,7 @@ export default function App() {
 						);
 					})}
 				</div>
-				<div className="flex-grow overflow-y-auto">
+				<div className="flex-grow ml-60">
 					<div className="max-w-[1800px] mx-auto p-6">
 						<Routes />
 					</div>
