@@ -1,4 +1,5 @@
-import CodeBlock from '../../components/CodeBlock';
+import CodeBlock, { CodeBlockViewer } from '../../components/CodeBlock';
+import ExternalLink from '../../components/ExternalLink';
 import Heading from '../../components/Heading';
 
 export default function UseState() {
@@ -255,6 +256,81 @@ export default function UseState() {
 					
 					`}
 				</CodeBlock>
+			</section>
+
+			<section className="space-y-4">
+				<Heading level={2}>Correctly typing useState for TypeScript</Heading>
+
+				<p>
+					TypeScript generally does a good job of inferring the type of the state variable by the
+					initial state passed in. For example, if you have{' '}
+					<code>const [loadingState, setLoadingState] = useState("loading");</code> it knows that{' '}
+					<code>loadingState</code> is a string and <code>setLoadingState</code> is a function that
+					has to be passed a string.
+				</p>
+
+				<p>
+					What if we have data that we need to fetch? We need to define the type, but it may start
+					as <code>null</code> or an empty array while we are fetching. If we later call the state
+					setter function with real data, TypeScript will complain because it thinks your type is{' '}
+					<code>null</code>. You have to help TypeScript a bit.
+				</p>
+
+				<CodeBlockViewer>
+					{`
+					// single item example
+					const [user, setUser] = useState<{name: string; email: string;} | null>(null);
+				
+					// array example
+					const [modules, setModules] = useState<Array<{ alias:string; title:string }>>([]);
+				
+					// TypeScript will error because user can be null
+					console.log(user.email);
+				
+					// the act of returning if it is falsey (aka null) will let TypeScript know anything after the return is NOT null.
+					// this is called type-narrowing
+					if(!user) {
+						return "Loading...";
+					}
+
+					// now TypeScript knows user is not null!
+					console.log(user.email);
+					`}
+				</CodeBlockViewer>
+
+				<p>
+					What if we have another problem - the type that TypeScript infers is too generic? Imagine
+					you have a state value that you only want to be "loading", "error", or "loaded". If you
+					simply use <code>const [loadingState, setLoadingState] = useState("loading");</code>{' '}
+					TypeScript will think that loadinState is just a <code>string</code>. We can also help out
+					TypeScript by using{' '}
+					<ExternalLink href="https://www.typescriptlang.org/docs/handbook/2/generics.html">
+						TypeScript Generics
+					</ExternalLink>{' '}
+					or the{' '}
+					<ExternalLink href="https://www.typescriptlang.org/docs/handbook/2/everyday-types.html#type-assertions">
+						as keyword
+					</ExternalLink>
+					.
+				</p>
+
+				<CodeBlockViewer>
+					{`
+					// DONT! - will only know it is a string and will allow any value, not what we want
+					const [loadingState, setLoadingState] = useState("loading");
+					setLoadingState("someValueWeDontExpect"); // TypeScript will be fine with this
+
+					// DO - we will explicitly tell TypeScript the possible values by using TypeScripts "generics"
+					const [loadingState, setLoadingState] = useState<"loading" | "error" | "loaded">("loading");
+					setLoadingState("someValueWeDontExpect"); // will error
+
+					// Another method, using the "as" keyword
+					const [loadingState, setLoadingState] = useState("loading" as "loading" | "error" | "loaded");
+					setLoadingState("someValueWeDontExpect"); // will error
+
+					// I typically see the generic method more often because it's probably technical more correct, but a bit uglier to look at
+					`}
+				</CodeBlockViewer>
 			</section>
 		</div>
 	);

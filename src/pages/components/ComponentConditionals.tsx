@@ -10,8 +10,8 @@ export default function ComponentConditionals() {
 			<section className="space-y-4">
 				<p>
 					Learning React forces you to learn JavaScript a bit better as well. React does not have
-					its own <code>if/else if/else</code> statements or special syntax to loop over arrays.
-					Instead, it greatly relies on{' '}
+					its own <code>if/else</code> statements or special syntax to loop over arrays. Instead, it
+					greatly relies on{' '}
 					<ExternalLink href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Expressions_and_Operators#expressions">
 						JavaScript expressions
 					</ExternalLink>{' '}
@@ -33,7 +33,8 @@ export default function ComponentConditionals() {
 				<CodeBlock>
 					{`
 					export default function App() {
-						const shouldShow = true;
+						// change me to true!
+						const shouldShow = false;
 					
 						return (
 							<div>

@@ -109,15 +109,20 @@ function Page({ element }: Pick<RouteProps, 'element'>) {
 					</div>
 				</div>
 				<div className="w-96 flex-shrink-0 pl-4">
-					<b>Table of Contents</b>
+					<div className="sticky top-4">
+						<b>Table of Contents</b>
 
-					{headings.map((heading) => (
-						<div key={heading}>
-							<a className="text-blue-400 hover:underline" href={`#${headingTranslation(heading)}`}>
-								{heading}
-							</a>
-						</div>
-					))}
+						{headings.map((heading) => (
+							<div key={heading}>
+								<a
+									className="text-blue-400 hover:underline"
+									href={`#${headingTranslation(heading)}`}
+								>
+									{heading}
+								</a>
+							</div>
+						))}
+					</div>
 				</div>
 			</div>
 		</PageContext.Provider>

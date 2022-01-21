@@ -14,7 +14,7 @@ export default function ComponentProps() {
 				<p>
 					Very similar to <code>args</code> in Ember, React uses <code>props</code> to pass data
 					into a component. Any JavaScript value can be passed as a prop (strings, booleans,
-					functions, etc). If a prop does not have a value (disabled) below it is assumed to be the{' '}
+					functions, etc). If a prop does not have a value (disabled below) it is assumed to be the{' '}
 					<code>true</code> boolean
 				</p>
 
@@ -56,9 +56,9 @@ export default function ComponentProps() {
 
 				<p>
 					Props are simply passed as a single parameter to the function component. It's pretty
-					commonplace to destructure the prop names in the function. This has two benefits: to
-					easily see all of the props that a certain component takes and allows for easy default
-					values if a prop is not passed in.
+					common to destructure the prop names in the function. This has two benefits: to easily see
+					all of the props that a certain component takes and allows for easy default values if a
+					prop is not passed in.
 				</p>
 
 				<CodeBlock>
@@ -177,6 +177,37 @@ export default function ComponentProps() {
 						return <Button {...rest} />;
 					}`}
 				</CodeBlockViewer>
+
+				<p>
+					Another common pattern in TypeScript is to allow all props for a certain HTML Element, in
+					this case, a button. You can use the <code>React.ComponentsWithoutRef</code> type. This
+					will allow any prop that is allowed on a button, but you can add your own types on top of
+					it. Refer to{' '}
+					<ExternalLink href="https://react-typescript-cheatsheet.netlify.app/docs/advanced/patterns_by_usecase/">
+						the cheatsheet
+					</ExternalLink>{' '}
+					for more info.
+				</p>
+
+				<CodeBlockViewer>{`
+					// implementation
+					interface ButtonProps extends React.ComponentPropsWithoutRef<"button"> {
+					  specialProp?: string;
+					}
+					function Button({ specialProp, ...rest }: ButtonProps) {
+					  // do something with specialProp
+					  return <button {...rest} />;
+					}
+					
+					// usage
+					export default function App() {
+					  // Type '"foo"' is not assignable to type '"button" | "submit" | "reset" | undefined'.
+					  // return <Button type="foo">text</Button>
+					
+					  // no error
+					  return <Button type="button">text</Button>;
+					}
+				`}</CodeBlockViewer>
 			</section>
 
 			<section className="space-y-4">
